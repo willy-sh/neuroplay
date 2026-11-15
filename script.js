@@ -97,9 +97,13 @@ function cerrarCapitulo(id) {
 function retosMenu() {
   modal(`<h2>🧪 Retos extra</h2><p class="small">Experimentos y ejercicios para practicar más.</p><div class="grid">${REGIONES.map(r => `<div class="card"><h3>${r.ico} ${r.n}</h3><button class="btn" onclick="closeModal();abrirRegion('${r.id}')">Abrir</button></div>`).join('')}</div>`);
 }
+function confirmaReinicio() {
+  modal(`<h2>¿Empezar de cero?</h2><p>Se borra todo tu progreso y vuelves a vivir la historia desde el principio.</p><div class="row" style="justify-content:center"><button class="btn gh" onclick="closeModal()">No, seguir</button><button class="btn" onclick="reiniciarJuego()">Sí, empezar de cero</button></div>`);
+}
+function reiniciarJuego() { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); }
 function menuJuego() {
   const b = (t, f) => `<button class="btn alt" style="width:100%;margin:6px 0" onclick="closeModal();${f}">${t}</button>`;
-  modal(`<h2>☰ Menú</h2>${b('🏚 Volver a la Mansión (historia)', 'Mansion.entrar()')}${b('⚔ Arenas', 'arenasMenu()')}${b('🎬 Ver la historia', 'closeModal();Cine.ver()')}${b('📓 Mi cuaderno', 'modal(Historia.cuaderno())')}${b('🛠 Taller de mejoras', 'Guion.tienda()')}${b('🧪 Retos extra', 'retosMenu()')}${b('📁 Expediente del reto', 'expediente()')}${b('👩‍🏫 Para docentes y jurado', "go('datos')")}${b('📝 Mi punto de partida', "evaluar('pre')")}${b('🎮 Pantalla de inicio', "Intro.mostrar(S,save,()=>go('inicio'))")}
+  modal(`<h2>☰ Menú</h2>${b('🏚 Volver a la Mansión (historia)', 'Mansion.entrar()')}${b('⚔ Arenas', 'arenasMenu()')}${b('🎬 Ver la historia', 'closeModal();Cine.ver()')}${b('📓 Mi cuaderno', 'modal(Historia.cuaderno())')}${b('🛠 Taller de mejoras', 'Guion.tienda()')}${b('🧪 Retos extra', 'retosMenu()')}${b('📁 Expediente del reto', 'expediente()')}${b('👩‍🏫 Para docentes y jurado', "go('datos')")}${b('📝 Mi punto de partida', "evaluar('pre')")}${b('🎮 Pantalla de inicio', "Intro.mostrar(S,save,()=>go('inicio'))")}${b('🔄 Empezar de cero', 'confirmaReinicio()')}
    <label class="ar-chk" style="color:inherit"><input type="checkbox" id="mSon" ${Sfx.activo ? 'checked' : ''} onchange="S.mute=!this.checked;Sfx.set(!S.mute);save()"> Sonido</label>`);
 }
 function arenasMenu() {
