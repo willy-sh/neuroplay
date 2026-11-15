@@ -103,6 +103,8 @@ const Historia = (() => {
   }
   function mostrar(lineas, fin) { if (document.pointerLockElement) document.exitPointerLock(); montar(); est = { l: lineas, i: 0, fin }; document.getElementById('dlg').hidden = false; document.body.classList.add('en-dialogo'); pintar(); }
   function cerrar() { clearInterval(tm); const f = est && est.fin; est = null; const d = document.getElementById('dlg'); if (d) d.hidden = true; document.body.classList.remove('en-dialogo'); if (f) f(); }
+  const ARTE_RET = { promedio: 'arte/villano.png', curie: 'arte/mentor_curie.png', johnson: 'arte/mentor_johnson.png', camarena: 'arte/mentor_camarena.png', jemison: 'arte/mentor_jemison.png' };
+  Object.values(ARTE_RET).forEach(u => { const i = new Image(); i.src = u; }); // se precargan para que no haya parpadeo al cambiar de personaje
   function pintar() {
     if (!est) return;
     const l = est.l[est.i]; if (!l) return cerrar();
@@ -110,11 +112,13 @@ const Historia = (() => {
     if (l.pista) { efecto(l); document.getElementById('dlg').hidden = true; return pistaModal(l.pista, () => { document.getElementById('dlg').hidden = false; est.i++; pintar(); }); }
     if (l.informe) { document.getElementById('dlg').hidden = true; return informe(); }
     const r = RETRATOS[l.q] || RETRATOS.narrador, img = $d('.dlg-retrato img');
-    const k = r.spr === 'promedio' ? 8 : 10, d = Px.rows(Px.SPR[r.spr]); img.onerror = null; img.src = Px.url(r.spr, k); img.width = d.w * k; img.height = d.h * k;
-    const arteRet = { promedio: 'arte/villano.png', curie: 'arte/mentor_curie.png', johnson: 'arte/mentor_johnson.png', camarena: 'arte/mentor_camarena.png', jemison: 'arte/mentor_jemison.png' }[l.q];
-    if (arteRet) { // arte pintado; si no carga, queda el dibujo de código
-      img.onerror = () => { img.onerror = null; img.src = Px.url(r.spr, k); img.width = d.w * k; img.height = d.h * k; };
-      img.src = arteRet; img.removeAttribute('width'); img.height = Math.round(d.h * k * (l.q === 'promedio' ? 1 : 1.1));
+    const k = r.spr === 'promedio' ? 8 : 10, d = Px.rows(Px.SPR[r.spr]);
+    const ponCodigo = () => { img.onerror = null; img.src = Px.url(r.spr, k); img.width = d.w * k; img.height = d.h * k; };
+    const arteRet = ARTE_RET[l.q];
+    if (img.dataset.q !== l.q) { // solo se cambia la imagen cuando habla otro personaje (así no parpadea entre líneas del mismo)
+      img.dataset.q = l.q;
+      if (arteRet) { img.onerror = ponCodigo; img.removeAttribute('width'); img.height = Math.round(d.h * k * (l.q === 'promedio' ? 1 : 1.1)); img.src = arteRet; } // arte pintado; si no carga, el dibujo de código
+      else ponCodigo();
     }
     $d('.dlg-retrato').className = 'dlg-retrato q-' + l.q; $d('.dlg-nombre').textContent = r.nombre + (r.placa ? ' · historia real' : '');
     const op = $d('.dlg-op'); op.innerHTML = ''; $d('.dlg-sig').style.visibility = 'hidden'; est.listo = false; est.l[est.i].escribiendo = true;

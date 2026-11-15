@@ -262,7 +262,9 @@ const Mansion = (() => {
   }
 
   /* ---------- Ciclo del juego ---------- */
-  function ajustar() { if (!renderer) return; const w = contenedor.clientWidth || innerWidth, h = contenedor.clientHeight || innerHeight; renderer.setSize(Math.max(160, Math.floor(w / RES)), Math.max(120, Math.floor(h / RES)), false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+  function ajustar() { if (!renderer) return; const w = contenedor.clientWidth || innerWidth, h = contenedor.clientHeight || innerHeight; renderer.setSize(Math.max(160, Math.floor(w / RES)), Math.max(120, Math.floor(h / RES)), false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    // Chispa va pegada a la cámara: en pantalla vertical (celular) el borde derecho queda muy cerca, así que se acerca al centro para que siempre se vea
+    const ancho = 1.1 * Math.tan(36 * Math.PI / 180) * camera.aspect, x = Math.min(.55, ancho * .55); if (chispaSpr) chispaSpr.position.x = x; if (chispaLuz) chispaLuz.position.x = x; }
   function iniciar3D() {
     renderer = new THREE.WebGLRenderer({ canvas: hud.lienzo, antialias: false, powerPreference: 'high-performance' }); renderer.setPixelRatio(1);
     scene = new THREE.Scene(); scene.background = new THREE.Color(0x05060f); scene.fog = new THREE.Fog(0x05060f, 2, 17);
