@@ -76,7 +76,7 @@ const PREGUNTAS_EVAL = [
 /* ===== 3) MUNDO (inicio): un juego en pixel art; las islas se tocan ===== */
 const cuatro = () => ['ciencia', 'mate', 'tec', 'ing'].every(i => S.hist.cierre[i]);
 const regionCompleta = id => ACTS.filter(a => a.reg === id).every(a => S.acts.includes(a.id));
-function estadoMundo() { const hechas = {}, total = {}; REGIONES.forEach(r => { const as = ACTS.filter(a => a.reg === r.id); total[r.id] = as.length; hechas[r.id] = as.filter(a => S.acts.includes(a.id)).length; }); return { hechas, total, recuperadas: { ...S.hist.cierre }, bloqueada: { int: !cuatro() } }; }
+function estadoMundo() { const hechas = {}, total = {}; REGIONES.forEach(r => { total[r.id] = 3; hechas[r.id] = Math.min(3, (S.arena && S.arena[r.id] && S.arena[r.id].estrellas) || 0); }); return { hechas, total, recuperadas: { ...S.hist.cierre }, bloqueada: { int: !cuatro() } }; } // estrellas = las que ganas en la pelea de cada isla
 let yendo = false;
 function irIsla(id) {
   if (yendo || document.body.classList.contains('en-dialogo')) return;

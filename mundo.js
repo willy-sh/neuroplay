@@ -15,14 +15,14 @@ const Mundo = (() => {
   const BOTELLA = { x: 304, y: 506 };
   const JUG0 = { x: 70, y: 508 }; // dónde empieza el personaje
   // Posiciones en pantalla vertical (celular) y como fracciones del ancho/alto en pantalla horizontal (PC)
-  const VERT = { ciencia: [100, 130], tec: [262, 116], mate: [78, 318], ing: [262, 300], int: [168, 452], botella: [304, 506] };
+  const VERT = { ciencia: [.27, .185], tec: [.73, .275], mate: [.27, .445], ing: [.73, .535], int: [.5, .75], botella: [.87, .93] }; // fracciones (el alto se adapta al celular)
   const HOR = { ciencia: [.14, .30], tec: [.40, .22], mate: [.33, .72], ing: [.64, .32], int: [.86, .66], botella: [.94, .90] };
   const horizontal = () => innerWidth / innerHeight > 1.15;
   function calcula() { // fija W, H y coloca las islas; se vuelve a llamar si cambia la forma de la ventana
-    HORIZ = horizontal(); H = 560; W = HORIZ ? Math.max(640, Math.min(1240, Math.round(H * innerWidth / innerHeight))) : 360;
-    Object.keys(ISLAS).forEach(id => { const p = HORIZ ? [Math.round(HOR[id][0] * W), Math.round(HOR[id][1] * H)] : VERT[id]; ISLAS[id].x = p[0]; ISLAS[id].y = p[1]; });
-    const pb = HORIZ ? [Math.round(HOR.botella[0] * W), Math.round(HOR.botella[1] * H)] : VERT.botella; BOTELLA.x = pb[0]; BOTELLA.y = pb[1];
-    JUG0.x = HORIZ ? 70 : 70; JUG0.y = 508;
+    HORIZ = horizontal(); H = HORIZ ? 560 : Math.max(560, Math.min(820, Math.round(360 * innerHeight / innerWidth))); W = HORIZ ? Math.max(640, Math.min(1240, Math.round(H * innerWidth / innerHeight))) : 360;
+    Object.keys(ISLAS).forEach(id => { const q = HORIZ ? HOR[id] : VERT[id], p = [Math.round(q[0] * W), Math.round(q[1] * H)]; ISLAS[id].x = p[0]; ISLAS[id].y = p[1]; });
+    const qb = HORIZ ? HOR.botella : VERT.botella, pb = [Math.round(qb[0] * W), Math.round(qb[1] * H)]; BOTELLA.x = pb[0]; BOTELLA.y = pb[1];
+    JUG0.x = 64; JUG0.y = H - 52;
     document.documentElement.style.setProperty('--mw', W); document.documentElement.style.setProperty('--mh', H);
   }
   calcula();
@@ -95,13 +95,13 @@ const Mundo = (() => {
       const isla = s.add.image(0, d.arte ? 6 : 0, 'isla_' + id).setScale(d.arte ? 1 : 3);
       cont.add(d.arte ? [isla] : [isla, s.add.image(0, -22, 'hito_' + id).setScale(3)]); // el arte pintado ya trae sus propios objetos
       const etiqueta = s.add.text(d.x, d.y + 66, d.nombre, { fontFamily: '"Press Start 2P"', fontSize: '10px', color: '#ffffff', stroke: '#1a1c2c', strokeThickness: 5 }).setOrigin(.5).setDepth(6);
-      const estrellas = [0, 1, 2].map(k => s.add.image(d.x + (k - 1) * 24, d.y + 86, 'estrella').setScale(2).setDepth(6).setVisible(false));
+      const estrellas = [0, 1, 2].map(k => s.add.image(d.x + (k - 1) * 20, d.y + 84, 'estrella').setScale(1.6).setDepth(6).setVisible(false));
       s.islas[id] = { cont, sombra, etiqueta, estrellas, espuma, d };
       if (!quieto) s.tweens.add({ targets: cont, y: d.y - 4, duration: 1500 + n * 130, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: n * 250 });
     });
     // Nubes que pasan
-    [[30, 60, 3, 26000], [Math.round(W * .7), 220, 2, 38000], [Math.round(W * .33), 420, 3, 31000], [Math.round(W * .84), 520, 2, 42000]].forEach(([x, y, e, t], n) => {
-      const nu = s.add.image(x, y, 'nube').setScale(e).setAlpha(.92).setDepth(8);
+    (HORIZ ? [[30, 60, 3, 26000], [Math.round(W * .7), 220, 2, 38000], [Math.round(W * .33), 420, 3, 31000], [Math.round(W * .84), 520, 2, 42000]] : [[Math.round(W * .5), Math.round(H * .6), 2, 42000]]).forEach(([x, y, e, t], n) => {
+      const nu = s.add.image(x, y, 'nube').setScale(e).setAlpha(.8).setDepth(4);
       if (!quieto) s.tweens.add({ targets: nu, x: W + 80, duration: t * (1 - x / (W + 80)), onComplete: () => { nu.x = -80; s.tweens.add({ targets: nu, x: W + 80, duration: t, repeat: -1 }); } });
     });
     // Botella con mensaje (lleva a «Cuéntame»)
@@ -208,8 +208,8 @@ const Mundo = (() => {
     return game;
   }
   function destruir() { try { if (game) game.destroy(true); } catch (e) { /* nada */ } game = null; escena = null; cola = []; pos = 'puerto'; }
-  const forma = () => ({ horiz: horizontal(), w: HORIZ ? Math.max(640, Math.min(1240, Math.round(560 * innerWidth / innerHeight))) : 360 });
-  const cambio = () => { const f = forma(); return f.horiz !== HORIZ || Math.abs(f.w - W) / W > .12; };
+  const forma = () => ({ horiz: horizontal(), w: horizontal() ? Math.max(640, Math.min(1240, Math.round(560 * innerWidth / innerHeight))) : 360, h: horizontal() ? 560 : Math.max(560, Math.min(820, Math.round(360 * innerHeight / innerWidth))) });
+  const cambio = () => { const f = forma(); return f.horiz !== HORIZ || Math.abs(f.w - W) / W > .12 || Math.abs(f.h - H) / H > .1; };
   const hasta = () => { const c = game && game.canvas; return c; };
   return { get W() { return W; }, get H() { return H; }, get horizontal() { return HORIZ; }, ISLAS, BOTELLA, calcula, destruir, cambio, iniciar, actualizar, ir, celebrar, presionar, pausa, hasta, encender, final, sacudir, guia};
 })();
