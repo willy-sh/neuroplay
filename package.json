@@ -1,0 +1,20 @@
+{
+  "name": "neuroplay",
+  "version": "1.0.0",
+  "description": "Plataforma web interactiva de acompañamiento, inspiración y exploración educativa STEM. Reto 04: Educación y Talento, Hackathon Jalisco Internacional 2026. Territorio del prototipo: Acatlán de Juárez, Jalisco; estudiantes de secundaria (12 a 14 años).",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node servidor.js",
+    "start": "node servidor.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@fontsource/press-start-2p": "^5.3.0",
+    "phaser": "^3.90.0",
+    "three": "^0.152.2"
+  }
+}

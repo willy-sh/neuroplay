@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEUROPLAY · Explora. Comprende. Descubre.</title>
+<meta name="description" content="Explora el mundo STEM, conoce tu entorno y descubre personas que abrieron camino. Hackathon Jalisco Internacional 2026, Reto 04: Educación y Talento.">
+<link rel="preload" href="fonts/press-start-2p.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="pixel-tema.css">
+<link rel="stylesheet" href="juego.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#41a6f6">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+<div id="intro" role="dialog" aria-modal="true" aria-label="Pantalla de inicio de NEUROPLAY"></div>
+<div id="arena" hidden role="dialog" aria-modal="true" aria-label="Arena de combate"></div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="top">
+  <button class="logo" id="logo" aria-label="NEUROPLAY, ir al mundo">🧠 NEUROPLAY</button>
+  <div class="top-tools">
+    <button class="tool" id="aAyuda" aria-label="Ayuda de esta pantalla">?</button>
+    <details class="ajustes">
+      <summary class="tool" aria-label="Ajustes de accesibilidad">⚙️</summary>
+      <div class="ajustes-panel" role="group" aria-label="Accesibilidad">
+        <button id="aMenos" aria-label="Letra más pequeña">A−</button>
+        <button id="aMas" aria-label="Letra más grande">A+</button>
+        <button id="aCon" aria-pressed="false" aria-label="Alto contraste">◐</button>
+        <button id="aVoz" aria-label="Leer en voz alta">Voz</button>
+      </div>
+    </details>
+  </div>
+</header>
+<main id="contenido" tabindex="-1">
+  <section id="inicio" class="view"></section>
+  <section id="stem" class="view"></section>
+  <section id="mapa" class="view"></section>
+  <section id="mentores" class="view"></section>
+  <section id="espacio" class="view"></section>
+  <section id="progreso" class="view"></section>
+  <section id="datos" class="view"></section>
+</main>
+<!-- Navegación inferior: pocas opciones, dibujos grandes, una palabra -->
+<nav id="nav" class="dock" aria-label="Menú principal">
+  <button data-view="inicio"><span aria-hidden="true">🌍</span>Mundo</button>
+  <button data-view="espacio"><span aria-hidden="true">💬</span>Cuéntame</button>
+</nav>
+<div id="modal" class="modal" hidden><div class="box" role="dialog" aria-modal="true"><button class="x" id="mx" aria-label="Cerrar">✕</button><div id="mbody"></div></div></div>
+<div id="toast" class="toast" role="status"></div>
+<script src="vendor/phaser.min.js"></script>
+<script src="vendor/three.min.js"></script>
+<script src="datos/acatlan.js"></script>
+<script src="datos/pisa.js"></script>
+<script src="pixel.js"></script>
+<script src="mundo.js"></script>
+<script src="historia.js"></script>
+<script src="mansion.js"></script>
+<script src="intro.js"></script>
+<script src="cine.js"></script>
+<script src="guion.js"></script>
+<script src="arena.js"></script>
+<script src="vocacion.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

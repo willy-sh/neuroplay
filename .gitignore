@@ -1,0 +1,11 @@
+node_modules/
+arte/crudo/
+_referencia/
+PENDIENTES.md
+orquestador.ps1
+NeuroPlay_entregable_tecnico.zip
+herramientas/*.zip
+*.log
+.claude/
+entregables/
+GUIA_NEUROPLAY.md

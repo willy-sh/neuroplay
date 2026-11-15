@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><title>Sprites de NEUROPLAY</title>
+<style>body{font:12px monospace;background:#d4ecff;margin:16px}div{display:inline-block;margin:6px;text-align:center;background:#fff;padding:6px;border:2px solid #1a1c2c}img,canvas{image-rendering:pixelated;display:block;margin:auto}</style>
+<h3>Vista de todos los dibujos (herramienta del equipo de arte)</h3><div id="s"></div><script src="../pixel.js"></script>
+<script>
+const s=document.getElementById('s');
+for(const n of Object.keys(Px.SPR)){const k=n.startsWith('mundo')?6:guiaK(n);const d=document.createElement('div');const c=Px.lienzo(n,k);d.append(c,n);s.append(d);}
+function guiaK(n){return n==='guia'?6:8}
+for(let i=1;i<=5;i++){const d=document.createElement('div');const c=Px.isla(i*37+5);c.style.width=c.width*4+'px';c.style.height=c.height*4+'px';d.append(c,'isla '+i);s.append(d);}
+</script>

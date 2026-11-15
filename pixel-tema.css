@@ -1,0 +1,161 @@
+/* NEUROPLAY · tema pixel art (se carga después de styles.css y lo reemplaza).
+   Reglas del tema: bordes de 4 px "gordos" con esquinas cortadas, letra pixelada solo en títulos y botones,
+   texto corrido en una letra redonda legible, sombras duras (sin desenfoques) y movimiento corto con salida suave. */
+@font-face{font-family:"Press Start 2P";src:url(fonts/press-start-2p.woff2) format("woff2");font-display:swap}
+:root{--pf:"Press Start 2P","Courier New",monospace;--ink:#1a1c2c;--bg:#9ad8ff;--primary:#3b5dc9;--line:#1a1c2c;--muted:#333c57;--out:cubic-bezier(.23,1,.32,1)}
+body{background-color:#9ad8ff;color:var(--ink);font-family:"Nunito","Segoe UI",system-ui,sans-serif;font-weight:700;image-rendering:pixelated}
+h1,h2,h3{font-family:var(--pf);font-weight:400;line-height:1.5;letter-spacing:0;text-wrap:balance}
+h1{font-size:1.05rem}h2{font-size:.85rem}h3{font-size:.72rem}
+.logo{font:400 .8rem/1 var(--pf)}
+.frase{font:400 .85rem/1.7 var(--pf);text-align:center}
+.small,.say{font-family:"Nunito","Segoe UI",system-ui,sans-serif}
+.read{font:400 1rem/1.6 var(--pf);color:var(--primary)}
+.px{image-rendering:pixelated;vertical-align:-.2em;margin:0 2px}
+
+/* Marcos de pixel (border-image de 5x5 pixeles que genera pixel.js) */
+.btn,.big,.chip,.tile,.persona,.card,.detalle,.stats div,.duo div,.listo,.qz,.box,.priv,.note,.nivel,.toast,.capas button,.opts button,.x,.tool,.back,.hist li{border:8px solid transparent;border-radius:0;border-image-slice:2 fill;border-image-width:8px;border-image-repeat:stretch;background:none!important;box-shadow:none;image-rendering:pixelated}
+.card,.detalle,.tile,.persona,.stats div,.duo div,.qz,.box,.priv,.note,.dock{border-image-source:var(--m-card)}
+.listo{border-image-source:var(--m-ok)}
+.btn,.big{border-image-source:var(--m-btn);font:400 .68rem/1.5 var(--pf);color:#fff;min-height:56px;padding:4px 10px;filter:drop-shadow(0 4px 0 var(--ink));transition:transform 100ms var(--out),filter 100ms var(--out)}
+.big{border-image-source:var(--m-big);font-size:.8rem;min-height:68px;padding:6px 22px}
+.btn.alt{border-image-source:var(--m-btnalt);color:var(--ink)}
+.btn.gh,.chip,.opts button,.x,.tool,.back,.hist li,.capas button{border-image-source:var(--m-gh);color:var(--ink)}
+.btn:active,.big:active{transform:translateY(4px);filter:drop-shadow(0 0 0 var(--ink))}
+.btn:disabled{opacity:.55}
+@media (hover:hover) and (pointer:fine){.btn:hover,.big:hover{transform:translateY(-2px);filter:drop-shadow(0 6px 0 var(--ink))}.tile:hover,.persona:hover,.capas button:hover,.chip:hover,.opts button:hover{border-image-source:var(--m-sel);transform:translateY(-2px)}}
+.chip{font:400 .6rem/1.4 var(--pf);min-height:56px;padding:2px 8px}
+.chip[aria-pressed=true],.chip.on{border-image-source:var(--m-btn);color:#fff}
+.chip.on::before,.chip[aria-pressed=true]::before{content:""}
+.capas button{font:400 .55rem/1.4 var(--pf);min-height:76px}
+.capas button[aria-pressed=true]{border-image-source:var(--m-sel)}
+.opts button{font-weight:800;font-size:1rem;min-height:60px;text-align:left;border-radius:0}
+.opts button.ok{border-image-source:var(--m-ok)}.opts button.no{border-image-source:var(--m-no)}
+.tile{font:400 .62rem/1.5 var(--pf);min-height:150px}
+.tile.done{border-image-source:var(--m-ok)}
+.persona b{font:400 .6rem/1.5 var(--pf)}
+.persona .foto,.rhead .ico,.medalla{border-radius:0;background:#fff;border:4px solid var(--ink)}
+.rhead .ico{border-color:var(--c)}
+.persona:hover .foto{border-color:var(--c)}
+.back{font:400 .6rem/1 var(--pf);min-height:48px;padding:0 8px}
+.nivel{font:400 .6rem/1.2 var(--pf);border-image-source:var(--m-sel)}
+.tool{width:52px;height:52px;padding:0;display:grid;place-items:center;font:400 .8rem/1 var(--pf)}
+.ajustes-panel{border:4px solid var(--ink);border-radius:0;background:#fff;box-shadow:4px 4px 0 var(--ink)}
+.ajustes-panel button{border-radius:0;border:4px solid var(--ink);background:#dbe4ff;font:400 .6rem/1 var(--pf)}
+.ajustes-panel button[aria-pressed=true]{background:var(--ink);color:#fff}
+.toast{border-image-source:var(--m-sel);font:400 .6rem/1.6 var(--pf);border-radius:0}
+.x{width:56px;height:56px}
+.dots i{border-radius:0}.dots i.on{background:var(--c,var(--ing))}
+.map{border:4px solid var(--ink);border-radius:0}
+.prog{border:4px solid var(--ink);border-radius:0;background:#fff;height:22px}.prog i{background:var(--primary)}
+.hist .n{border-radius:0;font-family:var(--pf);font-weight:400}
+.medalla{width:72px;height:72px}.medalla.off{background:#c9d4ea;filter:grayscale(1)}
+.stats b{font:400 1.1rem/1.4 var(--pf)}
+.paso i{border-radius:0}.paso i.on{border-radius:0}
+.legend i{border:2px solid var(--ink);border-radius:0}
+
+/* Barra inferior */
+.dock{border:0;border-top:4px solid var(--ink);border-image:none;border-radius:0;background:#fff!important;padding-bottom:env(safe-area-inset-bottom)}
+.dock button{font:400 .5rem/1.3 var(--pf);color:var(--muted)}
+.dock button.on{color:var(--primary)}.dock button.on::before{height:4px;border-radius:0;background:var(--primary)}
+
+/* Mundo */
+.hola{margin:4px 0 10px}.hola h1{font-size:.95rem}
+.mundo{position:relative;aspect-ratio:360/560;width:min(100%,calc((100dvh - 310px)*360/560));min-width:260px;margin:0 auto;border:8px solid transparent;border-image:var(--m-dark) 2/8px stretch;border-radius:0;background:#41a6f6;overflow:hidden;max-height:none;image-rendering:pixelated}
+#juego{position:absolute;inset:0}
+#juego canvas{display:block;width:100%!important;height:100%!important;image-rendering:pixelated}
+.isla-btn{position:absolute;transform:translate(-50%,-50%);width:38%;height:21%;background:none;border:0;padding:0;border-radius:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.isla-btn .fb{display:none}
+.botella-btn{width:25%;height:11%}
+body.teclado .isla-btn:focus-visible{outline:4px dashed #ffcd75;outline-offset:-4px}
+.sin-juego{aspect-ratio:auto;display:grid;gap:10px;padding:12px}
+.sin-juego #juego{display:none}.sin-juego .isla-btn{position:static;transform:none;width:auto;height:auto;border:8px solid transparent;border-image:var(--m-card) 2 fill/8px;font:400 .7rem/1.5 var(--pf);padding:12px}.sin-juego .fb{display:block}
+.cta{margin:18px 0 8px}
+
+/* Pantallas de región, mentores y zona: entrada escalonada corta (solo transform y opacidad) */
+@keyframes pix-in{from{opacity:0;transform:translateY(10px) scale(.96)}}
+.tile,.persona,.capas button,.stats div{animation:pix-in .28s var(--out) backwards}
+.tile:nth-child(2),.persona:nth-child(2),.capas button:nth-child(2){animation-delay:50ms}
+.tile:nth-child(3),.persona:nth-child(3),.capas button:nth-child(3){animation-delay:100ms}
+.tile:nth-child(4),.persona:nth-child(4),.capas button:nth-child(4){animation-delay:150ms}
+.view.on{animation:pix-in .25s var(--out)}
+.pop{animation:pix-pop .45s var(--out)}@keyframes pix-pop{0%{transform:scale(.9);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+.modal{background:#1a1c2ccc}.box{border-radius:0}
+.escena{font-size:4rem}
+.say{font-weight:800}
+body.hc{background:#fff}body.hc .btn,body.hc .big{outline:2px solid #000}
+@media(max-width:760px){main{padding-inline:12px}}
+@media(min-width:760px){.dock{border:4px solid var(--ink);border-bottom:0}}
+
+/* Pantalla de isla: la isla flota y los retos se ven como botones grandes */
+.escenario{display:grid;place-items:center;margin:2px 0 6px;height:232px}
+.flota{position:relative;width:264px;height:192px;animation:flota 3.2s ease-in-out infinite}
+.hito-img{position:absolute;left:84px;top:-2px}
+@keyframes flota{50%{transform:translateY(-8px)}}
+.tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.tile{width:min(46%,180px)}
+
+/* Detalles de los retos con borde de pixel */
+.grid4 div{border-radius:0;border:4px solid var(--ink);background:#dbe4ff}
+.road{border-radius:0;border:4px solid var(--ink);background:#dbe4ff}
+.mix{border-radius:0}
+.chips .btn{font-size:1.2rem;min-width:64px}
+.sl{accent-color:var(--primary)}
+
+/* ===== Historia: diálogos tipo videojuego, pistas y cuaderno ===== */
+body.en-dialogo{overflow:hidden}
+#dlg{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 10px 14px}
+#dlg[hidden]{display:none}
+.dlg-fondo{position:absolute;inset:0;background:#1a1c2c99}
+.dlg-retrato{position:relative;margin-bottom:-6px;z-index:1;animation:pix-in .25s var(--out);filter:drop-shadow(0 6px 0 #1a1c2c)}
+.dlg-retrato img{display:block;border:8px solid transparent;border-image:var(--m-sel) 2 fill/8px;padding:6px}
+.dlg-retrato.q-promedio img{border-image-source:var(--m-dark)}
+.dlg-caja{position:relative;z-index:1;width:min(100%,560px);min-height:178px;padding:14px 14px 18px;border:8px solid transparent;border-image:var(--m-card) 2 fill/8px;filter:drop-shadow(0 6px 0 #1a1c2c)}
+.dlg-nombre{font:400 .62rem/1.4 var(--pf);color:var(--primary);margin-bottom:8px}
+.dlg-texto{margin:0;font-size:1.12rem;line-height:1.45;font-weight:800;min-height:3.8em}
+.dlg-op{display:grid;gap:10px;margin-top:10px}
+.dlg-op .btn{font-size:.62rem;text-align:left;justify-content:flex-start}
+.dlg-sig{position:absolute;right:10px;bottom:8px;width:44px;height:44px;font:400 1rem/1 var(--pf);color:var(--primary);animation:parpadeo 1s steps(2) infinite}
+.dlg-saltar{position:absolute;right:14px;top:84px;z-index:2;font:400 .55rem/1 var(--pf);color:#fff;padding:10px 12px;border:4px solid #fff;background:#1a1c2c}
+@keyframes parpadeo{50%{opacity:.25}}
+.pista{text-align:center}.pista-etq{margin:0 0 6px}
+.barras{display:grid;gap:8px;margin:12px 0}
+.barra{display:grid;grid-template-columns:96px 1fr 62px;gap:8px;align-items:center;text-align:left;font-size:.85rem}
+.barra span{font-weight:800}.barra b{font:400 .55rem/1 var(--pf);text-align:right}
+.barra i{display:block;height:20px;width:var(--w);background:var(--c);border:4px solid var(--ink)}
+.pistas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:8px 0 14px}
+.pista-btn{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:92px;padding:10px;border:8px solid transparent;border-image:var(--m-gh) 2 fill/8px;font:400 .55rem/1.5 var(--pf);color:var(--ink);text-align:center;background:none}
+.pista-btn.bloq{opacity:.6}
+.pista-btn .e{font-size:1.4rem}
+.selladas{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:8px 0}
+.sellada{display:flex;gap:10px;align-items:center;font-size:.85rem}
+.sellada img{flex:none}
+@media (hover:hover) and (pointer:fine){.pista-btn:hover{border-image-source:var(--m-sel)}}
+.pista .frase,.dlg-texto{font-family:"Nunito","Segoe UI",system-ui,sans-serif}
+.pista .frase{font-size:1.05rem!important;font-weight:800;line-height:1.45;text-align:center}
+#mbody{padding-top:34px}
+.dlg-op .btn{font-family:"Nunito","Segoe UI",system-ui,sans-serif;font-size:1rem;font-weight:800;line-height:1.3;text-align:left;color:var(--ink)}
+
+/* ===== Mansión Neuron (primera persona) ===== */
+#mansion{position:fixed;inset:0;z-index:35;background:#05060f;overflow:hidden;user-select:none;-webkit-user-select:none}
+#mansion[hidden]{display:none}
+#m-lienzo{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;touch-action:none;display:block}
+.m-vineta{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 42%,#000b 100%)}
+.golpe .m-vineta{background:radial-gradient(circle at 50% 50%,transparent 15%,#b13e53dd 100%)}
+.m-sup{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;gap:8px;align-items:flex-start;pointer-events:none}
+.m-sup>*{pointer-events:auto}
+.m-vidas{display:flex;gap:2px;background:#1a1c2cc8;padding:6px;border:3px solid #f4f4f4}
+.m-obj{position:absolute;left:8px;right:8px;top:62px;font:400 .5rem/1.7 var(--pf);color:#fff;background:#1a1c2cc8;padding:6px 8px;border:3px solid #f4f4f4;pointer-events:none}
+.m-btns{display:flex;gap:6px}
+.m-mira{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;font:400 .8rem var(--pf);opacity:.55;pointer-events:none}
+.m-aviso{position:absolute;left:50%;bottom:170px;transform:translateX(-50%);max-width:90%;text-align:center;font:400 .55rem/1.7 var(--pf);color:#fff;background:#1a1c2ce8;border:4px solid #ffcd75;padding:10px 12px;opacity:0;pointer-events:none;transition:opacity .12s var(--out)}
+.m-aviso.on{opacity:1}
+.m-items{position:absolute;left:8px;top:112px;display:flex;flex-direction:column;gap:4px;pointer-events:none}
+.m-joy{position:absolute;left:18px;bottom:28px;width:132px;height:132px;border-radius:50%;background:#ffffff1f;border:4px solid #ffffff88;touch-action:none}
+.m-joy i{position:absolute;left:50%;top:50%;margin:-27px 0 0 -27px;width:54px;height:54px;border-radius:50%;background:#ffffffb0;border:4px solid #1a1c2c;pointer-events:none}
+.m-actuar{position:absolute;right:22px;bottom:46px;width:98px;height:98px;border-radius:50%;font:400 1.5rem/1 var(--pf);color:#fff;background:#b13e53;border:6px solid #1a1c2c;filter:drop-shadow(0 6px 0 #0007);touch-action:manipulation}
+.m-actuar:active{transform:translateY(4px);filter:none}
+body.en-mansion{overflow:hidden}body.en-mansion .dock,body.en-mansion .top{display:none}
+@media (pointer:fine){.m-joy{display:none}}
+.inv{display:grid;gap:8px;margin:8px 0}.inv-it{display:flex;gap:10px;align-items:center;font-weight:800}
+.cta2{display:grid;gap:12px;justify-items:center}
+.duda-ui .escena{height:96px}
