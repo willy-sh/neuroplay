@@ -3,11 +3,11 @@
    Texto corto, una idea por escena. Se puede saltar (Esc o «Saltar») y volver a ver desde el menú. */
 const Cine = (() => {
   const ESCENAS = [
-    { img: 'cine_1', mov: 'a', t: ['Isla Neuron flotaba sobre Jalisco. Y tenía un corazón: la Chispa.', 'La Chispa son las ganas de aprender. Mientras brillaba, todo funcionaba.'] },
-    { img: 'cine_2', mov: 'b', t: ['Los salones estaban llenos. Había preguntas, risas y proyectos por todos lados.'] },
-    { img: 'cine_3', mov: 'a', t: ['Entonces llegó Don Promedio. Con un solo número lo resumía todo: «Va todo bien».', 'Pero ese número no decía quién se estaba quedando atrás.'] },
-    { img: 'cine_4', mov: 'b', t: ['Nadie miró a los que faltaban, y la ayuda dejó de llegar. Muchos chicos empezaron a pensar: «Yo soy el problema».', 'La Chispa se fue apagando… y las aulas se cerraron, una por una.'] },
-    { img: 'cine_5', mov: 'a', t: ['Pero la Chispa no murió: se escondió en una vieja Mansión.', 'Alguien tiene que ir por ella. Alguien como tú.'], fin: true },
+    { img: 'cine_1', mov: 'a', fx: 50, t: ['Isla Neuron flotaba sobre Jalisco. Y tenía un corazón: la Chispa.', 'La Chispa son las ganas de aprender. Mientras brillaba, todo funcionaba.'] },
+    { img: 'cine_2', mov: 'b', fx: 30, t: ['Los salones estaban llenos. Había preguntas, risas y proyectos por todos lados.'] },
+    { img: 'cine_3', mov: 'a', fx: 74, t: ['Entonces llegó Don Promedio. Con un solo número lo resumía todo: «Va todo bien».', 'Pero ese número no decía quién se estaba quedando atrás.'] },
+    { img: 'cine_4', mov: 'b', fx: 50, t: ['Nadie miró a los que faltaban, y la ayuda dejó de llegar. Muchos chicos empezaron a pensar: «Yo soy el problema».', 'La Chispa se fue apagando… y las aulas se cerraron, una por una.'] },
+    { img: 'cine_5', mov: 'a', fx: 52, t: ['Pero la Chispa no murió: se escondió en una vieja Mansión.', 'Alguien tiene que ir por ella. Alguien como tú.'], fin: true },
   ];
   let est = null, tm = null;
   const quieto = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -17,7 +17,7 @@ const Cine = (() => {
     let el = $c(); if (!el) { el = document.createElement('div'); el.id = 'cine'; document.body.append(el); }
     if (document.pointerLockElement) document.exitPointerLock();
     est = { i: 0, j: 0, listo, escribiendo: false }; el.hidden = false; el.className = '';
-    el.innerHTML = `<div class="cn-fondo"><img class="cn-img" alt="" aria-hidden="true"></div><div class="cn-bandas" aria-hidden="true"></div>
+    el.innerHTML = `<div class="cn-fondo"><img class="cn-bg" alt="" aria-hidden="true"><div class="cn-marco"><img class="cn-img" alt="" aria-hidden="true"></div></div><div class="cn-bandas" aria-hidden="true"></div>
       <div class="cn-caja" role="dialog" aria-label="Historia" aria-live="polite"><p class="cn-texto"></p><button class="cn-sig" aria-label="Siguiente">▶</button></div>
       <button class="cn-saltar">Saltar ⏭</button><p class="cn-fin" hidden><span>Tú no eres el problema.</span></p>`;
     el.querySelector('.cn-caja').onclick = avanzar; el.querySelector('.cn-saltar').onclick = cerrar;
@@ -30,7 +30,7 @@ const Cine = (() => {
   function escena(i) {
     const el = $c(); if (!el || !est) return; est.i = i; est.j = 0; const e = ESCENAS[i], im = el.querySelector('.cn-img');
     el.classList.remove('cn-cambio'); void el.offsetWidth; el.classList.add('cn-cambio');
-    im.onerror = () => { im.style.visibility = 'hidden'; }; im.style.visibility = ''; im.src = `arte/${e.img}.jpg`;
+    im.onerror = () => { im.style.visibility = 'hidden'; }; im.style.visibility = ''; im.src = `arte/${e.img}.jpg`; im.style.objectPosition = (e.fx || 50) + '% 50%'; const bg = el.querySelector('.cn-bg'); if (bg) bg.src = im.src;
     im.className = 'cn-img mov-' + e.mov; if (typeof Sfx !== 'undefined' && i) Sfx.ui();
     linea();
   }

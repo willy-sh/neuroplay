@@ -40,7 +40,7 @@ const Mansion = (() => {
 
   let renderer, scene, camera, linterna, chispaLuz, contenedor, activo = false, listo = false, raf = 0, reloj = null;
   const jug = { x: 0, z: 0, ry: Math.PI, rx: 0, paso: 0 };
-  const tec = {}; let joy = { x: 0, y: 0 }, mira = null;
+  const tec = {}; let joy = { x: 0, y: 0 }, mira = null, mochila = () => {}, ayuda = () => {};
   let celdas = [], puertas = [], obstaculos = [], interact = [], dudas = [], luces = {}, anim = [], chispaSpr, hud = {};
   const estado = () => { S.m = S.m || { vidas: 3, items: [], mentores: {}, dudasOk: [], intro: false, x: null, z: null, ry: null, abiertas: {} }; return S.m; };
   const reducir = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -221,7 +221,7 @@ const Mansion = (() => {
   function libre(x, z) { const r = .42; for (const [dx, dz] of [[r, 0], [-r, 0], [0, r], [0, -r], [r * .7, r * .7], [-r * .7, -r * .7], [r * .7, -r * .7], [-r * .7, r * .7]]) { const cx = Math.floor((x + dx) / CELDA), cy = Math.floor((z + dz) / CELDA), c = celdas[cy] && celdas[cy][cx]; if (!c || c === '#') return false; if (c === 'puerta') { const p = puertas.find(q => q.x === cx && q.y === cy); if (p && !p.abierta) return false; } }
     for (const o of obstaculos) if (x + r > o.x0 && x - r < o.x1 && z + r > o.z0 && z - r < o.z1) return false; return true; }
   function mover(dt) {
-    if (bloqueado()) return; const f = (tec.w || tec.ArrowUp ? 1 : 0) - (tec.s || tec.ArrowDown ? 1 : 0) - joy.y, l = (tec.d ? 1 : 0) - (tec.a ? 1 : 0) + joy.x;
+    if (bloqueado()) return; const f = (tec.w || tec.ArrowUp ? 1 : 0) - (tec.s || tec.ArrowDown ? 1 : 0) + joy.y, l = (tec.d ? 1 : 0) - (tec.a ? 1 : 0) + joy.x;
     if (tec.ArrowLeft) jug.ry += 1.9 * dt; if (tec.ArrowRight) jug.ry -= 1.9 * dt;
     const m = Math.hypot(f, l); if (!m) return; const k = Math.min(1, m) * 3.1 * dt / m, fx = -Math.sin(jug.ry), fz = -Math.cos(jug.ry), rx = Math.cos(jug.ry), rz = -Math.sin(jug.ry);
     const nx = jug.x + (fx * f + rx * l) * k, nz = jug.z + (fz * f + rz * l) * k; if (libre(nx, jug.z)) jug.x = nx; if (libre(jug.x, nz)) jug.z = nz; jug.paso += dt * 8;
@@ -231,14 +231,14 @@ const Mansion = (() => {
   function montarHud() {
     contenedor = document.createElement('div'); contenedor.id = 'mansion'; contenedor.hidden = true;
     contenedor.innerHTML = `<canvas id="m-lienzo" aria-label="Mansión Neuron en primera persona"></canvas><div class="m-vineta" aria-hidden="true"></div>
-      <div class="m-sup"><div class="m-vidas" id="mVidas" aria-label="Ánimo"></div><div class="m-btns"><button class="tool" id="mMenu" aria-label="Menú del juego">☰</button><button class="tool" id="mInv" aria-label="Inventario y cuaderno">🎒</button><button class="tool" id="mAyuda" aria-label="Ayuda de controles">?</button><button class="tool" id="mSalir" aria-label="Salir de la mansión">✕</button></div></div>
+      <div class="m-sup"><div class="m-vidas" id="mVidas" aria-label="Ánimo"></div><div class="m-btns"><button class="tool" id="mMenu" aria-label="Menú del juego">☰</button><button class="tool" id="mSalir" aria-label="Salir de la mansión">✕</button></div></div>
       <div class="m-obj" id="mObj" aria-live="polite"></div><div class="m-mira" aria-hidden="true">+</div><div class="m-aviso" id="mAviso" aria-live="polite"></div><div class="m-items" id="mItems" aria-label="Objetos"></div>
       <div class="m-joy" id="mJoy" aria-label="Palanca para moverte"><i></i></div><button class="m-actuar" id="mActuar" aria-label="Actuar">A</button>`;
     document.body.append(contenedor);
     hud = { vidas: contenedor.querySelector('#mVidas'), obj: contenedor.querySelector('#mObj'), aviso: contenedor.querySelector('#mAviso'), items: contenedor.querySelector('#mItems'), lienzo: contenedor.querySelector('#m-lienzo'), joy: contenedor.querySelector('#mJoy') };
     contenedor.querySelector('#mSalir').onclick = salir; contenedor.querySelector('#mMenu').onclick = () => { if (!bloqueado()) menuJuego(); }; contenedor.querySelector('#mActuar').onclick = actuar;
-    contenedor.querySelector('#mInv').onclick = () => { if (bloqueado()) return; modal(`<h2 class="center">Mochila</h2><div class="inv">${estado().items.map(id => `<div class="inv-it">${Px.ico(OBJ[id].spr, 36)}<span>${OBJ[id].n}</span></div>`).join('') || '<p class="small center">Aún no tienes objetos.</p>'}</div>${Historia.cuaderno()}<div class="row" style="justify-content:center"><button class="btn" onclick="closeModal()">Seguir</button></div>`); };
-    contenedor.querySelector('#mAyuda').onclick = () => { if (bloqueado()) return; modal('<h2 class="center">Cómo jugar</h2><ol class="hist"><li><span class="n">1</span>Mueve la palanca (o W A S D) para caminar.</li><li><span class="n">2</span>Arrastra el dedo (o el mouse) para mirar.</li><li><span class="n">3</span>Toca A (o la tecla E) para actuar: tomar, abrir, hablar, usar terminales.</li><li><span class="n">4</span>Las Dudas te persiguen. Habla con los mentores para saber cómo responderlas.</li></ol><div class="row" style="justify-content:center"><button class="btn" onclick="closeModal()">Entendido</button></div>'); };
+    mochila = () => { if (bloqueado()) return; modal(`<h2 class="center">Mochila</h2><div class="inv">${estado().items.map(id => `<div class="inv-it">${Px.ico(OBJ[id].spr, 36)}<span>${OBJ[id].n}</span></div>`).join('') || '<p class="small center">Aún no tienes objetos.</p>'}</div>${Historia.cuaderno()}<div class="row" style="justify-content:center"><button class="btn" onclick="closeModal()">Seguir</button></div>`); };
+    ayuda = () => { if (bloqueado()) return; modal('<h2 class="center">Cómo jugar</h2><ol class="hist"><li><span class="n">1</span>Mueve la palanca (o W A S D) para caminar.</li><li><span class="n">2</span>Arrastra el dedo (o el mouse) para mirar.</li><li><span class="n">3</span>Toca A (o la tecla E) para actuar: tomar, abrir, hablar, usar terminales.</li><li><span class="n">4</span>Las Dudas te persiguen. Habla con los mentores para saber cómo responderlas.</li></ol><div class="row" style="justify-content:center"><button class="btn" onclick="closeModal()">Entendido</button></div>'); };
     // palanca táctil
     const j = hud.joy, knob = j.firstElementChild; let id = null;
     const mueve = e => { const r = j.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2; let dx = (e.clientX - cx) / (r.width / 2), dy = (e.clientY - cy) / (r.height / 2); const m = Math.hypot(dx, dy); if (m > 1) { dx /= m; dy /= m; } joy = { x: dx, y: -dy }; knob.style.transform = `translate(${dx * 34}px,${dy * 34}px)`; };
@@ -293,5 +293,5 @@ const Mansion = (() => {
   function salir() { activo = false; cancelAnimationFrame(raf); if (document.pointerLockElement) document.exitPointerLock(); if (contenedor) contenedor.hidden = true; document.body.classList.remove('en-mansion'); const e = estado(); e.x = jug.x; e.z = jug.z; e.ry = jug.ry; save(); }
   // Cuando la historia enciende una isla, la sala correspondiente también se ilumina
   if (typeof Mundo !== 'undefined') { const enc = Mundo.encender; Mundo.encender = (id, sil) => { enc(id, sil); luz(id); }; const fin = Mundo.final; Mundo.final = () => { fin(); Object.keys(luces).forEach(k => { luces[k].intensity = 1.2; }); }; }
-  return { entrar, salir, tras, luz, activo: () => activo, _tp: (x, z, ry) => { jug.x = x; jug.z = z; if (ry !== undefined) jug.ry = ry; }, _estado: () => ({ x: jug.x, z: jug.z, sala: salaDe(jug.x, jug.z), dudas: dudas.length }) };
+  return { entrar, salir, tras, luz, activo: () => activo, mochila: () => mochila(), ayuda: () => ayuda(), _tp: (x, z, ry) => { jug.x = x; jug.z = z; if (ry !== undefined) jug.ry = ry; }, _estado: () => ({ x: jug.x, z: jug.z, sala: salaDe(jug.x, jug.z), dudas: dudas.length }) };
 })();

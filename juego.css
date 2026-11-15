@@ -12,9 +12,9 @@
 .in-sub { font: 400 11px/1.7 var(--px); color: #cfe3ff; max-width: 30ch; margin: 0; opacity: 0; animation: in-fade 1s 2.4s forwards; }
 @keyframes in-fade { to { opacity: 1; } }
 .in-heroe, .in-villano { position: absolute; bottom: 12dvh; image-rendering: pixelated; filter: drop-shadow(0 0 18px rgba(115, 239, 247, .6)); pointer-events: none; }
-.in-heroe { left: 4%; width: clamp(80px, 24vw, 130px); transform: translateX(-140%); animation: in-entra-i 1.4s .6s cubic-bezier(.2, .9, .3, 1) forwards, in-flota 2.4s 2s ease-in-out infinite; }
+.in-heroe { left: 4%; width: clamp(80px, 24vw, 130px); opacity: 0; animation: in-fade 1.2s .6s forwards, in-flota 2.4s 2s ease-in-out infinite; }
 .in-villano { right: 4%; width: clamp(80px, 24vw, 130px); opacity: 0; filter: grayscale(1) drop-shadow(0 0 22px rgba(60, 60, 80, .9)); animation: in-fade 1.4s 1.8s forwards, in-flota 3s 2.4s ease-in-out infinite; }
-@keyframes in-entra-i { to { transform: none; } }
+@keyframes in-entra-i { from { transform: translateX(-140%); opacity: 0; } 60% { opacity: 1; } to { transform: translateX(0); opacity: 1; } }
 @keyframes in-flota { 50% { translate: 0 -8px; } }
 .in-cta { font: 400 12px/1.4 var(--px); color: var(--j-oro); background: none; border: 0; padding: 18px 12px; min-height: 56px; cursor: pointer; opacity: 0; animation: in-fade .6s 3.3s forwards, in-parpadeo 1.2s 4s infinite; }
 @keyframes in-parpadeo { 50% { opacity: .35; } }
@@ -217,3 +217,17 @@ body.en-mansion .modal button { cursor: pointer; }
 
 /* El aro de foco solo se ve cuando navegas con Tab (accesibilidad); con toque o ratón, y cuando un botón recibe el foco solo, no aparece. */
 body:not(.teclado) :focus-visible { outline: none !important; }
+
+/* Cinemática: en pantalla ancha ocupa todo; en celular (vertical) la imagen va en un marco centrado sobre un fondo difuminado */
+.cn-marco { position: absolute; inset: 0; overflow: hidden; }
+.cn-bg { display: none; }
+@media (max-aspect-ratio: 1/1) {
+  .cn-fondo { display: flex; align-items: center; justify-content: center; padding-bottom: 18dvh; box-sizing: border-box; background: #05071f; }
+  .cn-bg { display: block; position: absolute; inset: -8%; width: 116%; height: 116%; object-fit: cover; filter: blur(24px) brightness(.4) saturate(1.2); }
+  .cn-marco { position: relative; inset: auto; width: 100%; aspect-ratio: 1 / 1; border-top: 4px solid #8da2d6; border-bottom: 4px solid #8da2d6; box-shadow: 0 0 40px rgba(0, 0, 0, .6); }
+  .cn-bandas { background: linear-gradient(#000 0, transparent 10%, transparent 70%, rgba(3, 5, 26, .9) 100%); box-shadow: none; }
+  .cn-caja { bottom: calc(4% + env(safe-area-inset-bottom)); }
+  .cn-saltar { top: calc(14px + env(safe-area-inset-top)); }
+}
+
+.m-mas { margin: 6px 0; } .m-mas summary { cursor: pointer; padding: 10px 0; font: 400 10px var(--px, monospace); }

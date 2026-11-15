@@ -373,7 +373,7 @@ const Arena = (() => {
     await document.fonts.load('10px "Press Start 2P"').catch(() => {}); await cargar(id); conectar();
     const c = CFG[id], prev = S.arena && S.arena[id];
     tarjeta(`<h2>${c.n}</h2><p>${c.tip}</p>
-      <p class="ar-ctl">MOVER · ATACAR · ESQUIVAR · ABSORBER · ESPECIAL</p><p class="ar-dato"><b>El jefe tiene escudo:</b> rómpelo con un ejercicio.</p>
+      <p class="ar-dato"><b>El jefe tiene escudo:</b> rómpelo con un ejercicio.</p>
       ${prev && prev.ok ? `<p>Tu mejor marca: ${'★'.repeat(prev.estrellas)} · ${prev.mejor} pts</p>` : ''}
       <label class="ar-chk"><input type="checkbox" id="bCalm" ${S.calm ? 'checked' : ''}> Modo calmado</label>
       <button class="j-btn oro" id="bGo">¡Comenzar!</button><button class="j-btn alt" id="bNo">Ahora no</button>`);

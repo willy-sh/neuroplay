@@ -103,7 +103,9 @@ function confirmaReinicio() {
 function reiniciarJuego() { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); }
 function menuJuego() {
   const b = (t, f) => `<button class="btn alt" style="width:100%;margin:6px 0" onclick="closeModal();${f}">${t}</button>`;
-  modal(`<h2>☰ Menú</h2>${b('🏚 Volver a la Mansión (historia)', 'Mansion.entrar()')}${b('⚔ Arenas', 'arenasMenu()')}${b('🎬 Ver la historia', 'closeModal();Cine.ver()')}${b('📓 Mi cuaderno', 'modal(Historia.cuaderno())')}${b('🛠 Taller de mejoras', 'Guion.tienda()')}${b('🧪 Retos extra', 'retosMenu()')}${b('📁 Expediente del reto', 'expediente()')}${b('👩‍🏫 Para docentes y jurado', "go('datos')")}${b('📝 Mi punto de partida', "evaluar('pre')")}${b('🎮 Pantalla de inicio', "Intro.mostrar(S,save,()=>go('inicio'))")}${b('🔄 Empezar de cero', 'confirmaReinicio()')}
+  modal(`<h2>☰ Menú</h2>${b('🏚 La Mansión', 'Mansion.entrar()')}${b('⚔ Arenas', 'arenasMenu()')}${typeof Mansion !== 'undefined' && Mansion.activo() ? b('🎒 Mochila', 'Mansion.mochila()') : ''}${b('📓 Mi cuaderno', 'modal(Historia.cuaderno())')}${b('🛠 Taller de mejoras', 'Guion.tienda()')}
+   <details class="m-mas"><summary>Más opciones</summary>${typeof Mansion !== 'undefined' && Mansion.activo() ? b('❓ Cómo jugar', 'Mansion.ayuda()') : ''}${b('🎬 Ver la historia', 'closeModal();Cine.ver()')}${b('🧪 Retos extra', 'retosMenu()')}${b('🔄 Empezar de cero', 'confirmaReinicio()')}${b('🎮 Pantalla de inicio', "Intro.mostrar(S,save,()=>go('inicio'))")}
+    <p class="small" style="margin:10px 0 4px">Para docentes y jurado</p>${b('📁 Expediente del reto', 'expediente()')}${b('👩‍🏫 Datos y fuentes', "go('datos')")}${b('📝 Mi punto de partida', "evaluar('pre')")}</details>
    <label class="ar-chk" style="color:inherit"><input type="checkbox" id="mSon" ${Sfx.activo ? 'checked' : ''} onchange="S.mute=!this.checked;Sfx.set(!S.mute);save()"> Sonido</label>`);
 }
 function arenasMenu() {
