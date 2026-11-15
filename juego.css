@@ -231,3 +231,6 @@ body:not(.teclado) :focus-visible { outline: none !important; }
 }
 
 .m-mas { margin: 6px 0; } .m-mas summary { cursor: pointer; padding: 10px 0; font: 400 10px var(--px, monospace); }
+
+/* iPhone/Android hacen zoom al tocar un campo con letra menor a 16 px: se evita con 16 px mínimo */
+input, textarea, select, .in-panel input { font-size: 16px !important; }
